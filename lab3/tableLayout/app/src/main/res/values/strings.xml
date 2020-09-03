@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Table Layout Test</string>
+    <string name="versionHeader">Version</string>
+    <string name="CodenameHeader">Code Name</string>
+</resources>
