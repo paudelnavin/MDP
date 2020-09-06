@@ -1,5 +1,6 @@
 package edu.miu.cs.ecommerce
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,12 +26,12 @@ class MainActivity : AppCompatActivity() {
     fun signInClicked(view: View) {
         var isFound = false
         for (user in userList) {
-            if (user.username.equals((usernameTextBox.text).toString())) {
+            if (user.email.equals((usernameTextBox.text).toString())) {
                 if (user.password.equals((passwordTextBox.text).toString())) {
                     //login succesfull
                     isFound = true
                     val intent = Intent(this, ShoppingCategoryActivity::class.java)
-                    intent.putExtra("username", user.username)
+                    intent.putExtra("username", user.email)
                     startActivity(intent)
                 }
             }
@@ -47,22 +48,49 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun signUpClicked(view: View) {
-        var toast = Toast.makeText(
-            this,
-            "In next homework we will work about it",
-            Toast.LENGTH_SHORT
-        )
-        toast.setGravity(Gravity.CENTER, 0, 0)
-        toast.show()
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (intent.getSerializableExtra("newUser") != null) {
+            userList.add(intent.getSerializableExtra("newUser") as User)
+        }
     }
 
     fun forgotPasswordClicked(view: View) {
-        var toast = Toast.makeText(
-            this,
-            "In next homework we will work about it",
-            Toast.LENGTH_SHORT
-        )
-        toast.setGravity(Gravity.CENTER, 0, 0)
-        toast.show()
+        var isFound = false
+        for (user in userList) {
+            if (user.email.equals((usernameTextBox.text).toString())) {
+                isFound = true
+                val i = Intent(Intent.ACTION_SEND)
+                i.type = "message/rfc822"
+                i.putExtra(Intent.EXTRA_EMAIL, user.email)
+                i.putExtra(Intent.EXTRA_SUBJECT, "Your Password")
+                i.putExtra(Intent.EXTRA_TEXT, user.password)
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."))
+                } catch (ex: ActivityNotFoundException) {
+                    var toast = Toast.makeText(
+                        this,
+                        "There are no email clients installed.",
+                        Toast.LENGTH_SHORT
+                    )
+                    toast.setGravity(Gravity.CENTER, 0, 0)
+                    toast.show()
+                }
+            }
+        }
+        if(isFound == false) {
+            var toast = Toast.makeText(
+                this,
+                "There is no such email address registered. Enter your email again.",
+                Toast.LENGTH_SHORT
+            )
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show()
+
+        }
     }
 }
