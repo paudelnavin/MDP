@@ -1,5 +1,6 @@
 package edu.miu.cs.ecommerce
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +13,15 @@ class ShoppingCategoryActivity: AppCompatActivity() {
         welcomeUser.text = "welcome ${intent.getStringExtra("username")}"
     }
 
-    fun onElectronicClick(view: View) {}
-    fun onClothingClick(view: View) {}
+    fun onClothingClick(view: View) {
+        var intent = Intent(applicationContext, ClothingActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun onElectronicClick(view: View) {
+        var intent = Intent(applicationContext, ElectronicActivity::class.java)
+        startActivity(intent)
+    }
     fun onBeautyClick(view: View) {}
     fun onFoodClick(view: View) {}
 }
